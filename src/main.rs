@@ -34,11 +34,12 @@ mod tests {
     #[bench]
     fn bench_hello(b: &mut Bencher) {
         let mut buf = String::new();
-        File::open("hello.world").unwrap().read_to_string(&mut buf).unwrap();
+        File::open("hello.b").unwrap().read_to_string(&mut buf).unwrap();
         let tokens = compiler::lex(&mut buf.chars());
 
         b.iter(|| {
-            let mut vm = VM::new(tokens.clone());
+            let mut output = io::stdout();
+            let mut vm = VM::new(tokens.clone(), &mut output);
             vm.execute();
         }
         );
