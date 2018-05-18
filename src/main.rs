@@ -1,5 +1,5 @@
-#[cfg_attr(test, feature(test))]
-#[cfg(test)] extern crate test;
+//#[cfg_attr(test, feature(test))]
+//#[cfg(test)] extern crate test;
 
 use std::fs::File;
 use std::io::{self, Read};
@@ -11,16 +11,19 @@ mod vm;
 
 fn main() -> io::Result<()> {
 //    let mut buf = String::new();
-//    File::open("mandelbrot.b")?.read_to_string(&mut buf)?;
-    let mut buf = "+[->,----------]<[+++++++++++.<]";
+//    File::open("hello.b")?.read_to_string(&mut buf)?;
+    let mut buf = "+[-->-[>>+>-----<<]<--<---]>-.>>>+.>>..+++[.>]<<<<.+++.------.<<-.>>>>+.";
     let tokens = compiler::lex(&mut buf.chars());
-//    println!("{}, {:?}", tokens.len(), tokens);
 
+    let ast =  compiler::to_ast(&tokens);
+    println!("{:#?}", ast);
     let mut output = io::stdout();
-//    let mut output = File::create("mandelbrot.txt")?;
+//    let mut output = File::create("out.txt")?;
 
-    let mut vm = VM::new(tokens, &mut output);
-    vm.execute();
+    vm::execute_ast(&ast, &mut output);
+//    let mut vm = VM::new(tokens, &mut output);
+//    vm.execute();
+
 
     Ok(())
 }
